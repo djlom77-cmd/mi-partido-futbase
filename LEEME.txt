@@ -1,0 +1,16 @@
+MI PARTIDO - FUTBASE 7-11 (versión preparada para instalar y usar sin conexión)
+
+IMPORTANTE:
+- Esta carpeta se debe publicar en un alojamiento HTTPS, por ejemplo GitHub Pages.
+- No basta con abrir index.html desde la carpeta Descargas: el modo sin conexión y la instalación necesitan una web publicada.
+- Después de abrir la web publicada una primera vez con internet, espera unos segundos. Así se guarda la aplicación en el móvil para poder abrirla sin cobertura.
+- En Chrome: menú ⋮ > "Instalar aplicación" o "Añadir a pantalla de inicio" (el texto puede variar).
+- Los partidos y la plantilla se guardan en el almacenamiento del navegador de ese móvil. No se sincronizan con otros móviles.
+- Exporta copias de seguridad desde la propia aplicación con regularidad y antes de borrar datos de Chrome.
+- Si actualizas los archivos publicados, abre la web con internet para recibir la versión nueva.
+
+ARCHIVOS:
+- index.html: la aplicación.
+- manifest.webmanifest: datos para instalarla.
+- service-worker.js: permite abrirla sin conexión tras la primera carga.
+- icon-192.png e icon-512.png: iconos de instalación.

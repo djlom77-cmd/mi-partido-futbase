@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="104" fill="#10251d"/>
+  <circle cx="256" cy="256" r="150" fill="#fff" stroke="#d8e4dc" stroke-width="8"/>
+  <path d="M256 185l-54 39 21 64h66l21-64z" fill="#10251d"/>
+  <path d="M256 106l-49 18-5 61 54 0 54 0-5-61zM112 205l36-43 54 23-1 39-45 25zM400 205l-36-43-54 23 1 39 45 25zM166 350l-24 44 50 39 39-35-8-50zM346 350l24 44-50 39-39-35 8-50z" fill="#10251d"/>
+  <text x="256" y="468" font-family="Arial, sans-serif" font-size="42" font-weight="700" text-anchor="middle" fill="#fff">MI PARTIDO</text>
+</svg>
