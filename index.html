@@ -1,53 +1,974 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#a7192d"><title>Mi Partido 2.0 · CD Estrella Aljarafe</title>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#a7192d">
+<title>Mi Partido 2.0 · CD Estrella Aljarafe</title>
 <style>
-:root{--red:#b51f32;--dark:#172033;--bg:#f3f5f8;--card:#fff;--line:#e1e6ee;--muted:#687386}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--dark);font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif}header{background:linear-gradient(135deg,#861527,var(--red));color:white;padding:18px 15px;position:sticky;top:0;z-index:3}header h1{max-width:850px;margin:auto;font-size:20px}.wrap{max-width:850px;margin:auto;padding:14px 12px 60px}nav{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}.tab,button{border:0;border-radius:11px;padding:11px;font:inherit;font-weight:750;cursor:pointer}.tab{background:white;color:#596174;font-size:12px;border:1px solid var(--line)}.tab.active{background:var(--dark);color:white}.panel{display:none}.panel.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:11px;box-shadow:0 3px 12px #18223808}h2{font-size:17px;margin:0 0 11px}.muted{font-size:12px;color:var(--muted);line-height:1.45}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.field{display:flex;flex-direction:column;gap:5px;margin-bottom:8px}.field label{font-size:12px;font-weight:750;color:#596174}.field input,.field select,.actions input{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;font:inherit;background:white}button.primary{background:var(--red);color:white}button.dark{background:var(--dark);color:white}button.soft{background:#fcebed;color:#861527}button.outline{background:white;color:var(--dark);border:1px solid var(--line)}button.good{background:#e6f6ed;color:#126744}.actions{display:flex;gap:7px;flex-wrap:wrap}.actions>*{flex:1}.checklist{display:grid;gap:6px}.checkrow{display:flex;gap:9px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:10px}.checkrow input{width:18px;height:18px}.scorebox{background:var(--dark);color:white;border-radius:16px;text-align:center;padding:15px;margin-bottom:11px}.teams{font-size:12px;font-weight:800;opacity:.85}.score{font-size:39px;font-weight:900;margin:3px}.clock{font-size:34px;font-weight:900;font-variant-numeric:tabular-nums}.half{font-size:12px;opacity:.8;margin:3px}.players{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.player{background:white;border:1px solid var(--line);border-radius:11px;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:5px;padding:11px}.player b{font-size:13px}.player small{display:block;color:var(--muted);font-size:11px}.event{display:flex;align-items:center;gap:7px;padding:8px 0;border-bottom:1px solid var(--line)}.event:last-child{border:0}.time{font-weight:850;background:#fff0d3;color:#795000;padding:6px;border-radius:8px;font-size:11px;white-space:nowrap}.eventmain{flex:1;min-width:0}.eventmain b{display:block;font-size:12px}.eventmain small{color:var(--muted);font-size:11px}.event button{padding:7px}.hidden{display:none!important}.item{padding:11px;border:1px solid var(--line);border-radius:11px;margin-top:8px}.statsrow{display:grid;grid-template-columns:1fr repeat(3,52px);gap:4px;padding:9px 0;border-bottom:1px solid var(--line);font-size:12px}.statsrow span{text-align:center;font-weight:800}.toast{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:#172033;color:white;padding:11px 15px;border-radius:11px;z-index:9;max-width:90vw;font-size:13px}.notice{padding:10px;background:#fff8e8;border:1px solid #f0dfb9;color:#765000;border-radius:10px;font-size:12px;margin-bottom:11px}@media(min-width:620px){.players{grid-template-columns:repeat(3,1fr)}.tab{font-size:14px}}
-</style></head><body><header><h1>⚽ Mi Partido 2.0 · CD Estrella Aljarafe</h1></header><main class="wrap">
-<nav><button class="tab active" data-tab="live">⚽ Partido</button><button class="tab" data-tab="matches">📋 Partidos</button><button class="tab" data-tab="squad">👥 Plantilla</button><button class="tab" data-tab="stats">📊 Estadísticas</button></nav>
-<section id="live" class="panel active"><div id="setup" class="card"><h2>Preparar partido</h2><div class="grid">
-<div class="field"><label>Mi equipo</label><input id="team" value="CD Estrella Aljarafe"></div><div class="field"><label>Equipo rival</label><input id="opponent" placeholder="Nombre del rival"></div>
-<div class="field"><label>Jornada</label><input id="matchday" placeholder="Ej. 5"></div><div class="field"><label>Fecha</label><input id="date" type="date"></div>
-<div class="field"><label>¿Dónde jugamos?</label><select id="venue"><option value="home">En casa (local)</option><option value="away">Fuera (visitante)</option></select></div><div class="field"><label>Portero titular</label><input id="keeper" value="Lucas"></div></div>
-<p class="muted">Marca los jugadores convocados. La lista se guarda en este dispositivo.</p><div id="prePlayers" class="checklist"></div><div class="actions" style="margin-top:11px"><button class="primary" id="start">Crear partido</button><button class="outline" id="toSquad">Añadir jugadores</button></div></div>
-<div id="game" class="hidden"><div class="scorebox"><div class="teams" id="teamNames"></div><div class="score"><span id="scoreHome">0</span> – <span id="scoreAway">0</span></div><div class="half" id="halfLabel">PRIMERA PARTE</div><div class="clock" id="clock">00:00</div><div class="actions" style="margin-top:9px"><button class="good" id="toggle">▶ Iniciar</button><button class="outline" id="editTime">✎ Corregir tiempo</button><button class="outline" id="resetHalf">↺ Reiniciar parte</button></div><div class="actions" style="margin-top:7px"><button class="outline" id="nextHalf">Pasar a segunda parte</button><button class="outline" id="discount">Añadir descuento</button></div></div>
-<div class="card"><h2>⚽ ¿Quién ha marcado?</h2><p class="muted">Pulsa al goleador. Después selecciona al asistente o elige «Sin asistencia».</p><div id="goalPlayers" class="players"></div></div>
-<div class="card"><h2>🥅 Gol del equipo rival</h2><p class="muted">Se anotará como gol encajado por <b id="keeperName">Lucas</b>.</p><button class="dark" id="rivalGoal" style="width:100%">+ Registrar gol rival</button></div>
-<div class="card"><h2>📝 Cronología del partido</h2><div id="events"></div></div><div class="card"><h2>👥 Participación</h2><div id="played" class="checklist"></div></div>
-<div class="card"><div class="actions"><button class="primary" id="finish">Guardar y finalizar</button><button class="outline" id="cancel">Cancelar partido</button></div></div></div></section>
-<section id="matches" class="panel"><div class="card"><div class="actions"><h2 style="flex:2">Historial de partidos</h2><button class="primary" id="new">+ Nuevo</button></div><div id="history"></div></div><div class="card"><h2>💾 Copia de seguridad</h2><div class="actions"><button class="dark" id="export">Exportar copia</button><button class="outline" id="importBtn">Importar copia</button><input id="file" type="file" accept=".json" class="hidden"></div></div></section>
-<section id="squad" class="panel"><div class="card"><h2>Plantilla</h2><div class="actions"><input id="newPlayer" placeholder="Nombre del jugador"><button class="primary" id="addPlayer">Añadir</button></div><div id="squadList"></div></div><div class="notice">Los datos se guardan en este navegador. Exporta una copia de seguridad con frecuencia.</div></section>
-<section id="stats" class="panel"><div class="card"><h2>Estadísticas de temporada</h2><div id="summary"></div><div id="table"></div></div><div class="card"><button class="primary" id="copyLast" style="width:100%">Copiar resumen del último partido</button></div></section>
-</main><div id="toast" class="toast hidden"></div>
+:root{--red:#b51f32;--dark:#172033;--bg:#f3f5f8;--card:#fff;--line:#e1e6ee;--muted:#687386}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--dark);font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+header{background:linear-gradient(135deg,#861527,var(--red));color:white;padding:18px 15px;position:sticky;top:0;z-index:3}
+header h1{max-width:850px;margin:auto;font-size:20px}
+header p{max-width:850px;margin:4px auto 0;font-size:12px;opacity:0.9}
+.wrap{max-width:850px;margin:auto;padding:14px 12px 60px}
+nav{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.tab,button{border:0;border-radius:11px;padding:11px;font:inherit;font-weight:750;cursor:pointer}
+.tab{background:white;color:#596174;font-size:12px;border:1px solid var(--line);text-align:center}
+.tab.active{background:var(--dark);color:white}
+.panel{display:none}
+.panel.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:11px;box-shadow:0 3px 12px #18223808}
+h2{font-size:17px;margin:0 0 11px}
+.muted{font-size:12px;color:var(--muted);line-height:1.45}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:8px}
+.field label{font-size:12px;font-weight:750;color:#596174}
+.field input,.field select,.actions input{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;font:inherit;background:white}
+button.primary{background:var(--red);color:white}
+button.dark{background:var(--dark);color:white}
+button.soft{background:#fcebed;color:#861527}
+button.outline{background:white;color:var(--dark);border:1px solid var(--line)}
+button.good{background:#e6f6ed;color:#126744}
+button.danger{background:#fee2e2;color:#b91c1c;border:1px solid #fecaca}
+.actions{display:flex;gap:7px;flex-wrap:wrap}
+.actions>*{flex:1}
+.checklist{display:grid;gap:6px}
+.checkrow{display:flex;gap:9px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:10px}
+.checkrow input{width:18px;height:18px}
+.scorebox{background:var(--dark);color:white;border-radius:16px;text-align:center;padding:15px;margin-bottom:11px}
+.teams{font-size:12px;font-weight:800;opacity:.85}
+.score{font-size:39px;font-weight:900;margin:3px}
+.clock{font-size:34px;font-weight:900;font-variant-numeric:tabular-nums}
+.half{font-size:12px;opacity:.8;margin:3px}
+.players{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.player{background:white;border:1px solid var(--line);border-radius:11px;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:5px;padding:11px}
+.player b{font-size:13px}
+.player small{display:block;color:var(--muted);font-size:11px}
+.event{display:flex;align-items:center;gap:7px;padding:8px 0;border-bottom:1px solid var(--line)}
+.event:last-child{border:0}
+.time{font-weight:850;background:#fff0d3;color:#795000;padding:6px;border-radius:8px;font-size:11px;white-space:nowrap}
+.eventmain{flex:1;min-width:0}
+.eventmain b{display:block;font-size:12px}
+.eventmain small{color:var(--muted);font-size:11px}
+.event button{padding:7px}
+.hidden{display:none!important}
+.item{padding:11px;border:1px solid var(--line);border-radius:11px;margin-top:8px}
+.statsrow{display:grid;grid-template-columns:1fr repeat(3,52px);gap:4px;padding:9px 0;border-bottom:1px solid var(--line);font-size:12px;align-items:center}
+.statsrow span{text-align:center;font-weight:800}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.stat-box{background:white;border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:0 2px 6px rgba(0,0,0,0.02)}
+.stat-box .st-title{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:4px}
+.stat-box .st-val{font-size:26px;font-weight:900;color:var(--dark)}
+.toast{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:#172033;color:white;padding:11px 15px;border-radius:11px;z-index:9;max-width:90vw;font-size:13px}
+.notice{padding:10px;background:#fff8e8;border:1px solid #f0dfb9;color:#765000;border-radius:10px;font-size:12px;margin-bottom:11px}
+
+/* MODAL / DESPLEGABLE TIPO VENTANA */
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:100;display:flex;justify-content:center;align-items:center;padding:15px}
+.modal-card{background:white;border-radius:16px;width:100%;max-width:400px;padding:20px;box-shadow:0 10px 25px rgba(0,0,0,0.2)}
+.modal-card h3{margin:0 0 8px;font-size:18px}
+.modal-list{max-height:250px;overflow-y:auto;margin:12px 0;display:grid;gap:6px}
+.modal-item{padding:10px 12px;background:var(--bg);border:1px solid var(--line);border-radius:10px;font-weight:700;cursor:pointer;text-align:left;width:100%}
+.modal-item:hover{background:#e2e8f0}
+
+@media(min-width:620px){.players{grid-template-columns:repeat(3,1fr)}.tab{font-size:14px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>⚽ Mi Partido</h1>
+  <p>Registrador de goles y estadísticas · Fútbol base</p>
+</header>
+<main class="wrap">
+<nav>
+  <button class="tab active" data-tab="live">⚽ Partido</button>
+  <button class="tab" data-tab="matches">📋 Partidos</button>
+  <button class="tab" data-tab="squad">👥 Plantilla</button>
+  <button class="tab" data-tab="stats">📊 Estadísticas</button>
+</nav>
+
+<!-- SECCIÓN PARTIDO -->
+<section id="live" class="panel active">
+  <div id="setup" class="card">
+    <h2>Preparar partido</h2>
+    <div class="grid">
+      <div class="field"><label>Mi equipo</label><input id="team" value="CD Estrella Aljarafe"></div>
+      <div class="field"><label>Equipo rival</label><input id="opponent" placeholder="Nombre del rival"></div>
+      <div class="field"><label>Jornada</label><input id="matchday" placeholder="Ej. 5"></div>
+      <div class="field"><label>Fecha</label><input id="date" type="date"></div>
+      <div class="field"><label>¿Dónde jugamos?</label><select id="venue"><option value="home">En casa (local)</option><option value="away">Fuera (visitante)</option></select></div>
+      <div class="field"><label>Portero titular</label><input id="keeper" value="Lucas"></div>
+    </div>
+    <p class="muted">Marca los jugadores convocados. La lista se guarda en este dispositivo.</p>
+    <div id="prePlayers" class="checklist"></div>
+    <div class="actions" style="margin-top:11px">
+      <button class="primary" id="start" type="button">Crear partido</button>
+      <button class="outline" id="toSquad" type="button">Añadir jugadores</button>
+    </div>
+  </div>
+
+  <div id="game" class="hidden">
+    <div class="scorebox">
+      <div class="teams" id="teamNames"></div>
+      <div class="score"><span id="scoreHome">0</span> – <span id="scoreAway">0</span></div>
+      <div class="half" id="halfLabel">PRIMERA PARTE</div>
+      <div class="clock" id="clock">00:00</div>
+      <div class="actions" style="margin-top:9px">
+        <button class="good" id="toggle" type="button">▶ Iniciar</button>
+        <button class="outline" id="editTime" type="button">✎ Corregir tiempo</button>
+        <button class="outline" id="resetHalf" type="button">↺ Reiniciar parte</button>
+      </div>
+      <div class="actions" style="margin-top:7px">
+        <button class="outline" id="nextHalf" type="button">Pasar a segunda parte</button>
+        <button class="outline" id="discount" type="button">Añadir descuento</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>⚽ ¿Quién ha marcado?</h2>
+      <p class="muted">Pulsa al goleador. Se abrirá un menú para elegir quién dio la asistencia (o sin asistencia).</p>
+      <div id="goalPlayers" class="players"></div>
+    </div>
+    <div class="card">
+      <h2>🥅 Gol del equipo rival</h2>
+      <p class="muted">Se anotará como gol encajado por <b id="keeperName">Lucas</b>.</p>
+      <button class="dark" id="rivalGoal" style="width:100%" type="button">+ Registrar gol rival</button>
+    </div>
+    <div class="card">
+      <h2>📝 Cronología del partido</h2>
+      <div id="events"></div>
+    </div>
+    <div class="card">
+      <h2>👥 Participación</h2>
+      <div id="played" class="checklist"></div>
+    </div>
+    <div class="card">
+      <div class="actions">
+        <button class="primary" id="finish" type="button">Guardar y finalizar</button>
+        <button class="outline" id="cancel" type="button">Cancelar partido</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN PARTIDOS -->
+<section id="matches" class="panel">
+  <div class="card">
+    <div class="actions"><h2 style="flex:2">Historial de partidos</h2><button class="primary" id="new" type="button">+ Nuevo</button></div>
+    <div id="history"></div>
+  </div>
+  <div class="card">
+    <h2>💾 Copia de seguridad</h2>
+    <div class="actions">
+      <button class="dark" id="export" type="button">Exportar copia</button>
+      <button class="outline" id="importBtn" type="button">Importar copia</button>
+      <input id="file" type="file" accept=".json" class="hidden">
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN PLANTILLA -->
+<section id="squad" class="panel">
+  <div class="card">
+    <h2>Plantilla</h2>
+    <div class="actions">
+      <input id="newPlayer" placeholder="Nombre del jugador">
+      <button class="primary" id="addPlayer" type="button">Añadir</button>
+    </div>
+    <div id="squadList"></div>
+  </div>
+  <div class="notice">Los datos se guardan en este navegador. Exporta una copia de seguridad con frecuencia.</div>
+</section>
+
+<!-- SECCIÓN ESTADÍSTICAS -->
+<section id="stats" class="panel">
+  <div class="card">
+    <h2>📊 Estadísticas de temporada</h2>
+    <p class="muted" style="margin-bottom:12px">Solo cuentan los partidos finalizados y guardados.</p>
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="st-title">Partidos</div>
+        <div class="st-val" id="stMatches">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="st-title">Goles del equipo</div>
+        <div class="st-val" id="stGoals">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="st-title">Jugadores</div>
+        <div class="st-val" id="stPlayers">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="st-title">Asistencias</div>
+        <div class="st-val" id="stAssists">0</div>
+      </div>
+    </div>
+    <div id="table"></div>
+  </div>
+  <div class="card">
+    <button class="primary" id="copyLast" style="width:100%" type="button">Copiar resumen del último partido</button>
+  </div>
+</section>
+</main>
+
+<div id="toast" class="toast hidden"></div>
+<div id="modalContainer"></div>
+
 <script>
-const KEY='miPartidoFutbase_v1';const $=id=>document.getElementById(id);let state=load(),current=null,elapsed=0,running=false,timer=null,startedAt=0,half=1,discount=0;
-function load(){try{let x=JSON.parse(localStorage.getItem(KEY)||'{}');return{players:x.players||[],matches:x.matches||[]}}catch{return{players:[],matches:[]}}}function save(){localStorage.setItem(KEY,JSON.stringify(state))}
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function msg(t){$('toast').textContent=t;$('toast').classList.remove('hidden');setTimeout(()=>$('toast').classList.add('hidden'),2300)}function today(){return new Date().toISOString().slice(0,10)}$('date').value=today();
-function tab(id){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));if(id==='matches')drawHistory();if(id==='squad')drawSquad();if(id==='stats')drawStats()}document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
-function drawPre(){$('prePlayers').innerHTML=state.players.length?state.players.map(p=>`<label class="checkrow"><input type="checkbox" value="${esc(p.id)}" checked><span>${esc(p.name)}</span></label>`).join(''):'<p class="muted">Añade primero jugadores en Plantilla.</p>'}
-$('toSquad').onclick=()=>tab('squad');$('new').onclick=()=>{if(current){msg('Termina el partido abierto primero.');return}resetSetup();tab('live')};function resetSetup(){$('opponent').value='';$('matchday').value='';$('date').value=today();$('setup').classList.remove('hidden');$('game').classList.add('hidden');drawPre()}
-$('start').onclick=()=>{let opponent=$('opponent').value.trim();if(!opponent){msg('Escribe el equipo rival.');return}let team=$('team').value.trim()||'CD Estrella Aljarafe',selected=[...$('prePlayers').querySelectorAll('input:checked')].map(x=>x.value);current={id:Date.now().toString(),team,opponent,venue:$('venue').value,keeper:$('keeper').value.trim()||'Lucas',matchday:$('matchday').value,date:$('date').value,home:0,away:0,events:[],played:selected,finished:false};elapsed=0;half=1;discount=0;running=false;drawGame();$('setup').classList.add('hidden');$('game').classList.remove('hidden');tab('live');msg('Partido preparado. ¡A jugar!')};
-function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}function tick(){if(!running)return;elapsed+=Math.floor((Date.now()-startedAt)/1000);startedAt=Date.now();$('clock').textContent=fmt(elapsed)}function drawClock(){$('clock').textContent=fmt(elapsed);$('toggle').textContent=running?'Ⅱ Pausar':'▶ Iniciar'}$('toggle').onclick=()=>{if(running){tick();running=false;clearInterval(timer);timer=null}else{running=true;startedAt=Date.now();timer=setInterval(tick,250)}drawClock()};
-$('editTime').onclick=()=>{let v=prompt('Introduce minutos:segundos (ej. 23:16)',fmt(elapsed));if(v===null)return;let m=v.match(/^(\d{1,3}):([0-5]\d)$/);if(!m){msg('Formato incorrecto. Usa minutos:segundos.');return}elapsed=Number(m[1])*60+Number(m[2]);if(running)startedAt=Date.now();drawClock()};
-$('resetHalf').onclick=()=>{if(!confirm('¿Reiniciar el cronómetro de esta parte?'))return;elapsed=0;if(running)startedAt=Date.now();drawClock()};
-$('nextHalf').onclick=()=>{if(half===1){if(running){tick();running=false;clearInterval(timer);timer=null}half=2;elapsed=0;discount=0;drawGame();msg('Comienza la segunda parte.')}else msg('Ya estás en la segunda parte. Usa el tiempo de descuento si procede.')};
-$('discount').onclick=()=>{let v=prompt('Minutos de descuento que se jugarán en esta parte:',String(discount||0));if(v===null)return;let n=Number(v);if(!Number.isInteger(n)||n<0||n>30){msg('Introduce entre 0 y 30 minutos.');return}discount=n;drawGame();msg('Descuento anotado: +'+n+' minutos. El cronómetro sigue contando normalmente.')};
-function drawGame(){if(!current)return;let hn=current.venue==='home'?current.team:current.opponent,an=current.venue==='home'?current.opponent:current.team;$('teamNames').textContent=hn.toUpperCase()+' · '+an.toUpperCase();$('scoreHome').textContent=current.venue==='home'?current.home:current.away;$('scoreAway').textContent=current.venue==='home'?current.away:current.home;$('halfLabel').textContent=(half===1?'PRIMERA':'SEGUNDA')+' PARTE'+(discount?' · +'+discount+"' descuento":'');$('keeperName').textContent=current.keeper;drawClock();
-$('goalPlayers').innerHTML=state.players.filter(p=>current.played.includes(p.id)).map(p=>`<button class="player" data-goal="${esc(p.id)}"><span><b>${esc(p.name)}</b><small>${current.events.filter(e=>e.type==='us'&&e.playerId===p.id).length} gol(es)</small></span><span>⚽ +1</span></button>`).join('')||'<p class="muted">No hay convocados. Vuelve a preparar la plantilla.</p>';document.querySelectorAll('[data-goal]').forEach(b=>b.onclick=()=>goal(b.dataset.goal));
-$('played').innerHTML=state.players.map(p=>`<label class="checkrow"><input type="checkbox" data-play="${esc(p.id)}" ${current.played.includes(p.id)?'checked':''}><span>${esc(p.name)}</span></label>`).join('');document.querySelectorAll('[data-play]').forEach(c=>c.onchange=()=>{let id=c.dataset.play;if(c.checked&&!current.played.includes(id))current.played.push(id);if(!c.checked)current.played=current.played.filter(x=>x!==id);drawGame()});drawEvents()}
-function eventBase(type,playerId=null,assistId=null){return{id:Date.now().toString()+Math.random(),type,playerId,assistId,half,seconds:elapsed,minute:Math.floor(elapsed/60),second:elapsed%60,keeper:current.keeper,discount}}
-function goal(id){let options=state.players.filter(p=>p.id!==id);let assistId=null;if(options.length){let choices=options.map((p,i)=>(i+1)+'. '+p.name).join('\n');let answer=prompt('¿Quién dio la asistencia? Escribe su número; deja vacío si no hubo asistencia.\n\n'+choices,'');if(answer===null)return;if(answer.trim()){let index=Number(answer)-1;if(!Number.isInteger(index)||!options[index]){msg('Asistente no válido.');return}assistId=options[index].id}}current.events.push(eventBase('us',id,assistId));current.home++;drawGame();msg('Gol y asistencia registrados.')}
-$('rivalGoal').onclick=()=>{current.events.push(eventBase('rival'));current.away++;drawGame();msg('Gol rival registrado para '+current.keeper+'.')};
-function drawEvents(){let es=[...current.events].sort((a,b)=>a.half-b.half||a.seconds-b.seconds);$('events').innerHTML=es.length?es.map(e=>{let p=state.players.find(x=>x.id===e.playerId),a=state.players.find(x=>x.id===e.assistId);return `<div class="event"><span class="time">${e.half===2?'2T':'1T'} ${fmt(e.seconds)}</span><div class="eventmain"><b>${e.type==='rival'?'🥅 '+esc(current.opponent):'⚽ '+esc(p?.name||'Jugador')}</b><small>${e.type==='rival'?'Encajado por '+esc(e.keeper||current.keeper):a?'Asistencia: '+esc(a.name):'Sin asistencia'}</small></div><button class="outline" data-edit="${e.id}">✎</button><button class="outline" data-del="${e.id}">✕</button></div>`}).join(''):'<p class="muted">Todavía no hay goles registrados.</p>';
-document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{let e=current.events.find(x=>x.id===b.dataset.edit),v=prompt('Corrige el tiempo (minutos:segundos)',fmt(e.seconds));if(v===null)return;let m=v.match(/^(\d{1,3}):([0-5]\d)$/);if(!m){msg('Formato incorrecto.');return}e.seconds=Number(m[1])*60+Number(m[2]);e.minute=Math.floor(e.seconds/60);e.second=e.seconds%60;drawEvents()});
-document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{let e=current.events.find(x=>x.id===b.dataset.del);if(!confirm('¿Eliminar este gol?'))return;if(e.type==='rival')current.away=Math.max(0,current.away-1);else current.home=Math.max(0,current.home-1);current.events=current.events.filter(x=>x.id!==e.id);drawGame()})}
-$('finish').onclick=()=>{if(running){tick();running=false;clearInterval(timer);timer=null}if(!confirm('¿Guardar y finalizar el partido?'))return;current.finished=true;current.elapsed=elapsed;state.matches.unshift(JSON.parse(JSON.stringify(current)));save();current=null;elapsed=0;$('game').classList.add('hidden');$('setup').classList.remove('hidden');drawPre();tab('matches');msg('Partido guardado.')};
-$('cancel').onclick=()=>{if(!confirm('¿Cancelar sin guardar?'))return;running=false;clearInterval(timer);timer=null;current=null;resetSetup()};
-function drawSquad(){$('squadList').innerHTML=state.players.map(p=>`<div class="event"><div class="eventmain"><b>${esc(p.name)}</b></div><button class="outline" data-ren="${p.id}">Editar</button><button class="outline" data-rem="${p.id}">Eliminar</button></div>`).join('')||'<p class="muted">No hay jugadores añadidos.</p>';document.querySelectorAll('[data-ren]').forEach(b=>b.onclick=()=>{let p=state.players.find(x=>x.id===b.dataset.ren),n=prompt('Nombre del jugador',p.name);if(n&&n.trim()){p.name=n.trim();save();drawSquad();drawPre()}});document.querySelectorAll('[data-rem]').forEach(b=>b.onclick=()=>{if(!confirm('¿Eliminar jugador de la plantilla?'))return;state.players=state.players.filter(p=>p.id!==b.dataset.rem);save();drawSquad();drawPre()})}
-$('addPlayer').onclick=()=>{let n=$('newPlayer').value.trim();if(!n)return;if(state.players.some(p=>p.name.toLowerCase()===n.toLowerCase())){msg('Ese jugador ya existe.');return}state.players.push({id:Date.now().toString(),name:n});$('newPlayer').value='';save();drawSquad();drawPre()};
-function drawHistory(){$('history').innerHTML=state.matches.map(m=>{let own=m.venue==='away'?m.away:m.home,opp=m.venue==='away'?m.home:m.away;return `<div class="item"><b>${esc(m.team)} ${own} – ${opp} ${esc(m.opponent)}</b><div class="muted">${esc(m.date||'')} · ${m.matchday?'Jornada '+esc(m.matchday):'Amistoso'} · ${m.events.length} goles</div><button class="outline" data-view="${m.id}" style="margin-top:7px">Ver resumen</button><div id="v${m.id}" class="hidden"></div></div>`}).join('')||'<p class="muted">Todavía no hay partidos guardados.</p>';document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{let m=state.matches.find(x=>x.id===b.dataset.view),box=$('v'+m.id);box.classList.toggle('hidden');box.innerHTML=esc(summary(m)).replace(/\n/g,'<br>')})}
-function summary(m){let lines=[`${m.team} ${m.home}–${m.away} ${m.opponent}`,`Fecha: ${m.date||''} · Jornada: ${m.matchday||'—'}`,`Localía: ${m.venue==='home'?'En casa':'Fuera'}`,`Portero: ${m.keeper||'No indicado'}`,''];m.events.forEach(e=>{let p=state.players.find(x=>x.id===e.playerId),a=state.players.find(x=>x.id===e.assistId);lines.push(`${e.half===2?'2T':'1T'} ${fmt(e.seconds??e.minute*60)}: ${e.type==='rival'?'Gol rival (encajado por '+(e.keeper||m.keeper)+')':(p?.name||'Jugador')+(a?' · asistencia de '+a.name:' · sin asistencia')}`)});return lines.join('\n')}
-function drawStats(){let goals={},assists={},played={},conceded=0,keepers={};state.players.forEach(p=>{goals[p.id]=0;assists[p.id]=0;played[p.id]=0});state.matches.forEach(m=>{m.events.forEach(e=>{if(e.type==='us'&&goals[e.playerId]!==undefined)goals[e.playerId]++;if(e.assistId&&assists[e.assistId]!==undefined)assists[e.assistId]++;if(e.type==='rival'){conceded++;let k=e.keeper||m.keeper||'Lucas';keepers[k]=(keepers[k]||0)+1}});(m.played||[]).forEach(id=>{if(played[id]!==undefined)played[id]++})});$('summary').innerHTML=`<p><b>Partidos:</b> ${state.matches.length} · <b>Goles encajados:</b> ${conceded}</p><p><b>Goles encajados por portero:</b> ${Object.entries(keepers).map(([k,v])=>esc(k)+': '+v).join(' · ')||'Sin datos'}</p>`;$('table').innerHTML='<div class="statsrow"><b>Jugador</b><span>Goles</span><span>Asist.</span><span>Part.</span></div>'+state.players.map(p=>`<div class="statsrow"><b>${esc(p.name)}</b><span>${goals[p.id]}</span><span>${assists[p.id]}</span><span>${played[p.id]}</span></div>`).join('')}
-$('export').onclick=()=>{let blob=new Blob([JSON.stringify({version:2,...state},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='copia-mi-partido-'+today()+'.json';a.click();URL.revokeObjectURL(a.href)};$('importBtn').onclick=()=>$('file').click();$('file').onchange=async e=>{try{let d=JSON.parse(await e.target.files[0].text());if(!Array.isArray(d.players)||!Array.isArray(d.matches))throw Error();if(!confirm('¿Reemplazar los datos actuales con esta copia?'))return;state={players:d.players,matches:d.matches};save();drawPre();drawSquad();drawHistory();drawStats();msg('Copia importada.')}catch{msg('No se pudo leer esa copia.')}e.target.value=''};
-$('copyLast').onclick=async()=>{if(!state.matches.length){msg('No hay partidos guardados.');return}try{await navigator.clipboard.writeText(summary(state.matches[0]));msg('Resumen copiado.')}catch{msg('No se pudo copiar automáticamente.')}};
-drawPre();drawSquad();drawHistory();drawStats();
-</script></body></html>
+const KEY = 'miPartidoFutbase_v1';
+const $ = id => document.getElementById(id);
+
+let state = load();
+let current = null;
+let elapsed = 0;
+let running = false;
+let timer = null;
+let startedAt = 0;
+let baseElapsed = 0;
+let half = 1;
+let discount = 0;
+
+function load() {
+    try {
+        let x = JSON.parse(localStorage.getItem(KEY) || '{}');
+        return { players: x.players || [], matches: x.matches || [] };
+    } catch {
+        return { players: [], matches: [] };
+    }
+}
+
+function save() {
+    localStorage.setItem(KEY, JSON.stringify(state));
+}
+
+function esc(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function msg(t) {
+    const toast = $('toast');
+    if (!toast) return;
+    toast.textContent = t;
+    toast.classList.remove('hidden');
+    setTimeout(() => toast.classList.add('hidden'), 2300);
+}
+
+function today() {
+    return new Date().toISOString().slice(0, 10);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if ($('date')) {
+        $('date').value = today();
+    }
+
+    // Pestañas (Navegación)
+    document.querySelectorAll('.tab').forEach(b => {
+        b.onclick = () => {
+            const tabId = b.dataset.tab;
+            document.querySelectorAll('.tab').forEach(tb => tb.classList.toggle('active', tb.dataset.tab === tabId));
+            document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === tabId));
+            if (tabId === 'live') drawPre();
+            if (tabId === 'matches') drawHistory();
+            if (tabId === 'squad') drawSquad();
+            if (tabId === 'stats') drawStats();
+        };
+    });
+
+    if ($('toSquad')) $('toSquad').onclick = () => {
+        document.querySelectorAll('.tab').forEach(tb => tb.classList.toggle('active', tb.dataset.tab === 'squad'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'squad'));
+        drawSquad();
+    };
+
+    if ($('new')) $('new').onclick = () => {
+        if (current) {
+            msg('Termina el partido abierto primero.');
+            return;
+        }
+        resetSetup();
+        document.querySelectorAll('.tab').forEach(tb => tb.classList.toggle('active', tb.dataset.tab === 'live'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'live'));
+    };
+
+    if ($('start')) $('start').onclick = () => {
+        let opponent = $('opponent').value.trim();
+        if (!opponent) {
+            msg('Escribe el equipo rival.');
+            return;
+        }
+        let team = $('team').value.trim() || 'CD Estrella Aljarafe';
+        let selected = [...document.querySelectorAll('#prePlayers input:checked')].map(x => x.value);
+        
+        current = {
+            id: Date.now().toString(),
+            team,
+            opponent,
+            venue: $('venue').value,
+            keeper: $('keeper').value.trim() || 'Lucas',
+            matchday: $('matchday').value,
+            date: $('date').value,
+            home: 0,
+            away: 0,
+            events: [],
+            played: selected,
+            finished: false
+        };
+        
+        elapsed = 0;
+        baseElapsed = 0;
+        half = 1;
+        discount = 0;
+        running = false;
+        
+        drawGame();
+        $('setup').classList.add('hidden');
+        $('game').classList.remove('hidden');
+        document.querySelectorAll('.tab').forEach(tb => tb.classList.toggle('active', tb.dataset.tab === 'live'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'live'));
+        msg('Partido preparado. ¡A jugar!');
+    };
+
+    if ($('toggle')) $('toggle').onclick = () => {
+        if (running) {
+            running = false;
+            clearInterval(timer);
+            timer = null;
+            elapsed = baseElapsed + Math.floor((Date.now() - startedAt) / 1000);
+            baseElapsed = elapsed;
+        } else {
+            running = true;
+            startedAt = Date.now();
+            baseElapsed = elapsed;
+            timer = setInterval(tick, 200);
+        }
+        drawClock();
+    };
+
+    if ($('editTime')) $('editTime').onclick = () => {
+        let v = prompt('Introduce minutos:segundos (ej. 23:16)', fmt(elapsed));
+        if (v === null) return;
+        let m = v.match(/^(\d{1,3}):([0-5]\d)$/);
+        if (!m) {
+            msg('Formato incorrecto. Usa minutos:segundos.');
+            return;
+        }
+        elapsed = Number(m[1]) * 60 + Number(m[2]);
+        baseElapsed = elapsed;
+        if (running) startedAt = Date.now();
+        drawClock();
+    };
+
+    if ($('resetHalf')) $('resetHalf').onclick = () => {
+        if (!confirm('¿Reiniciar el cronómetro de esta parte?')) return;
+        elapsed = 0;
+        baseElapsed = 0;
+        if (running) startedAt = Date.now();
+        drawClock();
+    };
+
+    if ($('nextHalf')) $('nextHalf').onclick = () => {
+        if (half === 1) {
+            if (running) {
+                running = false;
+                clearInterval(timer);
+                timer = null;
+                elapsed = baseElapsed + Math.floor((Date.now() - startedAt) / 1000);
+                baseElapsed = elapsed;
+            }
+            half = 2;
+            elapsed = 0;
+            baseElapsed = 0;
+            discount = 0;
+            drawGame();
+            msg('Comienza la segunda parte.');
+        } else {
+            msg('Ya estás en la segunda parte. Usa el tiempo de descuento si procede.');
+        }
+    };
+
+    if ($('discount')) $('discount').onclick = () => {
+        let v = prompt('Minutos de descuento que se jugarán en esta parte:', String(discount || 0));
+        if (v === null) return;
+        let n = Number(v);
+        if (!Number.isInteger(n) || n < 0 || n > 30) {
+            msg('Introduce entre 0 y 30 minutos.');
+            return;
+        }
+        discount = n;
+        drawGame();
+        msg('Descuento anotado: +' + n + ' minutos.');
+    };
+
+    if ($('rivalGoal')) $('rivalGoal').onclick = () => {
+        if (!current) return;
+        current.events.push(eventBase('rival'));
+        drawGame();
+        msg('Gol rival registrado para ' + current.keeper + '.');
+    };
+
+    if ($('finish')) $('finish').onclick = () => {
+        if (!current) return;
+        if (running) {
+            running = false;
+            clearInterval(timer);
+            timer = null;
+            elapsed = baseElapsed + Math.floor((Date.now() - startedAt) / 1000);
+        }
+        if (!confirm('¿Guardar y finalizar el partido?')) return;
+        
+        let hG = 0, aG = 0;
+        current.events.forEach(e => {
+            if (e.type === 'us') {
+                if (current.venue === 'home') hG++; else aG++;
+            } else if (e.type === 'rival') {
+                if (current.venue === 'home') aG++; else hG++;
+            }
+        });
+        current.home = hG;
+        current.away = aG;
+        current.finished = true;
+        current.elapsed = elapsed;
+
+        state.matches.unshift(JSON.parse(JSON.stringify(current)));
+        save();
+        current = null;
+        elapsed = 0;
+        baseElapsed = 0;
+        $('game').classList.add('hidden');
+        $('setup').classList.remove('hidden');
+        drawPre();
+        
+        document.querySelectorAll('.tab').forEach(tb => tb.classList.toggle('active', tb.dataset.tab === 'matches'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'matches'));
+        drawHistory();
+        msg('Partido guardado.');
+    };
+
+    if ($('cancel')) $('cancel').onclick = () => {
+        if (!confirm('¿Cancelar sin guardar?')) return;
+        running = false;
+        clearInterval(timer);
+        timer = null;
+        current = null;
+        resetSetup();
+    };
+
+    if ($('addPlayer')) $('addPlayer').onclick = () => {
+        let n = $('newPlayer').value.trim();
+        if (!n) return;
+        if (state.players.some(p => p.name.toLowerCase() === n.toLowerCase())) {
+            msg('Ese jugador ya existe.');
+            return;
+        }
+        state.players.push({ id: Date.now().toString(), name: n });
+        $('newPlayer').value = '';
+        save();
+        drawSquad();
+        drawPre();
+        msg('Jugador añadido.');
+    };
+
+    if ($('export')) $('export').onclick = () => {
+        let blob = new Blob([JSON.stringify({ version: 2, ...state }, null, 2)], { type: 'application/json' });
+        let a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'copia-mi-partido-' + today() + '.json';
+        a.click();
+        URL.revokeObjectURL(a.href);
+    };
+
+    if ($('importBtn')) $('importBtn').onclick = () => $('file').click();
+
+    if ($('file')) $('file').onchange = async e => {
+        try {
+            let d = JSON.parse(await e.target.files[0].text());
+            if (!Array.isArray(d.players) || !Array.isArray(d.matches)) throw Error();
+            if (!confirm('¿Reemplazar los datos actuales con esta copia?')) return;
+            state = { players: d.players, matches: d.matches };
+            save();
+            drawPre();
+            drawSquad();
+            drawHistory();
+            drawStats();
+            msg('Copia importada.');
+        } catch {
+            msg('No se pudo leer esa copia.');
+        }
+        e.target.value = '';
+    };
+
+    if ($('copyLast')) $('copyLast').onclick = async () => {
+        if (!state.matches.length) {
+            msg('No hay partidos guardados.');
+            return;
+        }
+        copyTextToClipboard(summary(state.matches[0]));
+    };
+
+    drawPre();
+    drawSquad();
+    drawHistory();
+    drawStats();
+});
+
+function resetSetup() {
+    if ($('opponent')) $('opponent').value = '';
+    if ($('matchday')) $('matchday').value = '';
+    if ($('date')) $('date').value = today();
+    if ($('setup')) $('setup').classList.remove('hidden');
+    if ($('game')) $('game').classList.add('hidden');
+    drawPre();
+}
+
+function drawPre() {
+    const container = $('prePlayers');
+    if (!container) return;
+    if (state.players.length === 0) {
+        container.innerHTML = '<p class="muted">Añade primero jugadores en Plantilla.</p>';
+        return;
+    }
+    container.innerHTML = state.players.map(p => `
+        <label class="checkrow">
+            <input type="checkbox" value="${esc(p.id)}" checked>
+            <span>${esc(p.name)}</span>
+        </label>
+    `).join('');
+}
+
+function fmt(s) {
+    return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+}
+
+function tick() {
+    if (!running) return;
+    elapsed = baseElapsed + Math.floor((Date.now() - startedAt) / 1000);
+    $('clock').textContent = fmt(elapsed);
+}
+
+function drawClock() {
+    if ($('clock')) $('clock').textContent = fmt(elapsed);
+    if ($('toggle')) $('toggle').textContent = running ? 'Ⅱ Pausar' : '▶ Iniciar';
+}
+
+function drawGame() {
+    if (!current) return;
+    let hn = current.venue === 'home' ? current.team : current.opponent;
+    let an = current.venue === 'home' ? current.opponent : current.team;
+    
+    if ($('teamNames')) $('teamNames').textContent = hn.toUpperCase() + ' · ' + an.toUpperCase();
+    
+    let homeGoals = 0;
+    let awayGoals = 0;
+    current.events.forEach(e => {
+        if (e.type === 'us') {
+            if (current.venue === 'home') homeGoals++;
+            else awayGoals++;
+        } else if (e.type === 'rival') {
+            if (current.venue === 'home') awayGoals++;
+            else homeGoals++;
+        }
+    });
+    current.home = homeGoals;
+    current.away = awayGoals;
+
+    if ($('scoreHome')) $('scoreHome').textContent = current.venue === 'home' ? current.home : current.away;
+    if ($('scoreAway')) $('scoreAway').textContent = current.venue === 'home' ? current.away : current.home;
+    if ($('halfLabel')) $('halfLabel').textContent = (half === 1 ? 'PRIMERA' : 'SEGUNDA') + ' PARTE' + (discount ? ' · +' + discount + "' descuento" : '');
+    if ($('keeperName')) $('keeperName').textContent = current.keeper;
+    
+    drawClock();
+    
+    const goalPlayersContainer = $('goalPlayers');
+    if (goalPlayersContainer) {
+        const activePlayers = state.players.filter(p => current.played.includes(p.id));
+        goalPlayersContainer.innerHTML = activePlayers.length ? activePlayers.map(p => {
+            let count = current.events.filter(e => e.type === 'us' && e.playerId === p.id).length;
+            return `
+                <button class="player" data-goal="${esc(p.id)}" type="button">
+                    <span><b>${esc(p.name)}</b><small>${count} gol(es)</small></span>
+                    <span>⚽ +1</span>
+                </button>
+            `;
+        }).join('') : '<p class="muted">No hay jugadores convocados seleccionados.</p>';
+        
+        goalPlayersContainer.querySelectorAll('[data-goal]').forEach(b => {
+            b.onclick = () => openAssistModal(b.dataset.goal);
+        });
+    }
+    
+    const playedContainer = $('played');
+    if (playedContainer) {
+        playedContainer.innerHTML = state.players.map(p => `
+            <label class="checkrow">
+                <input type="checkbox" data-play="${esc(p.id)}" ${current.played.includes(p.id) ? 'checked' : ''}>
+                <span>${esc(p.name)}</span>
+            </label>
+        `).join('') || '<p class="muted">No hay jugadores en la plantilla.</p>';
+        
+        playedContainer.querySelectorAll('[data-play]').forEach(c => {
+            c.onchange = () => {
+                let id = c.dataset.play;
+                if (c.checked && !current.played.includes(id)) current.played.push(id);
+                if (!c.checked) current.played = current.played.filter(x => x !== id);
+                drawGame();
+            };
+        });
+    }
+    
+    drawEvents();
+}
+
+function eventBase(type, playerId = null, assistId = null) {
+    let currentElapsed = running ? baseElapsed + Math.floor((Date.now() - startedAt) / 1000) : elapsed;
+    return {
+        id: Date.now().toString() + Math.random(),
+        type,
+        playerId,
+        assistId,
+        half,
+        seconds: currentElapsed,
+        minute: Math.floor(currentElapsed / 60),
+        second: currentElapsed % 60,
+        keeper: current ? current.keeper : 'Lucas',
+        discount
+    };
+}
+
+function openAssistModal(scorerId) {
+    let scorer = state.players.find(p => p.id === scorerId);
+    let options = state.players.filter(p => p.id !== scorerId);
+    
+    let modalHTML = `
+        <div class="modal-overlay" id="assistModal">
+            <div class="modal-card">
+                <h3>⚽ Gol de ${esc(scorer ? scorer.name : 'Jugador')}</h3>
+                <p class="muted" style="margin-bottom:12px">Selecciona quién dio la asistencia o pulsa "Sin asistencia":</p>
+                <div class="modal-list">
+                    <button class="modal-item" data-assist="none" style="background:#fcebed; color:#861527;" type="button">🚫 Sin asistencia</button>
+                    ${options.map(p => `<button class="modal-item" data-assist="${esc(p.id)}" type="button">👟 ${esc(p.name)}</button>`).join('')}
+                </div>
+                <button class="outline" id="closeModal" style="width:100%; margin-top:10px" type="button">Cancelar</button>
+            </div>
+        </div>
+    `;
+    
+    $('modalContainer').innerHTML = modalHTML;
+    
+    $('assistModal').querySelectorAll('[data-assist]').forEach(btn => {
+        btn.onclick = () => {
+            let astVal = btn.dataset.assist;
+            let assistId = astVal === 'none' ? null : astVal;
+            
+            current.events.push(eventBase('us', scorerId, assistId));
+            $('modalContainer').innerHTML = '';
+            drawGame();
+            msg('Gol y asistencia registrados correctamente.');
+        };
+    });
+    
+    $('closeModal').onclick = () => {
+        $('modalContainer').innerHTML = '';
+    };
+}
+
+function drawEvents() {
+    const eventsContainer = $('events');
+    if (!eventsContainer || !current) return;
+    let es = [...current.events].sort((a, b) => a.half - b.half || a.seconds - b.seconds);
+    eventsContainer.innerHTML = es.length ? es.map(e => {
+        let p = state.players.find(x => x.id === e.playerId);
+        let a = state.players.find(x => x.id === e.assistId);
+        return `
+            <div class="event">
+                <span class="time">${e.half === 2 ? '2T' : '1T'} ${fmt(e.seconds)}</span>
+                <div class="eventmain">
+                    <b>${e.type === 'rival' ? '🥅 ' + esc(current.opponent) : '⚽ ' + esc(p?.name || 'Jugador')}</b>
+                    <small>${e.type === 'rival' ? 'Encajado por ' + esc(e.keeper || current.keeper) : a ? 'Asistencia: ' + esc(a.name) : 'Sin asistencia'}</small>
+                </div>
+                <button class="outline" data-edit="${e.id}" type="button">✎</button>
+                <button class="outline" data-del="${e.id}" type="button">✕</button>
+            </div>
+        `;
+    }).join('') : '<p class="muted">Todavía no hay goles registrados.</p>';
+    
+    eventsContainer.querySelectorAll('[data-edit]').forEach(b => {
+        b.onclick = () => {
+            let e = current.events.find(x => x.id === b.dataset.edit);
+            let v = prompt('Corrige el tiempo (minutos:segundos)', fmt(e.seconds));
+            if (v === null) return;
+            let m = v.match(/^(\d{1,3}):([0-5]\d)$/);
+            if (!m) {
+                msg('Formato incorrecto.');
+                return;
+            }
+            e.seconds = Number(m[1]) * 60 + Number(m[2]);
+            e.minute = Math.floor(e.seconds / 60);
+            e.second = e.seconds % 60;
+            drawEvents();
+        };
+    });
+    
+    eventsContainer.querySelectorAll('[data-del]').forEach(b => {
+        b.onclick = () => {
+            let e = current.events.find(x => x.id === b.dataset.del);
+            if (!confirm('¿Eliminar este gol?')) return;
+            current.events = current.events.filter(x => x.id !== e.id);
+            drawGame();
+        };
+    });
+}
+
+function drawSquad() {
+    const squadList = $('squadList');
+    if (!squadList) return;
+    squadList.innerHTML = state.players.map(p => `
+        <div class="event">
+            <div class="eventmain"><b>${esc(p.name)}</b></div>
+            <button class="outline" data-ren="${p.id}" type="button">Editar</button>
+            <button class="outline" data-rem="${p.id}" type="button">Eliminar</button>
+        </div>
+    `).join('') || '<p class="muted">No hay jugadores añadidos.</p>';
+    
+    squadList.querySelectorAll('[data-ren]').forEach(b => {
+        b.onclick = () => {
+            let p = state.players.find(x => x.id === b.dataset.ren);
+            let n = prompt('Nombre del jugador', p.name);
+            if (n && n.trim()) {
+                p.name = n.trim();
+                save();
+                drawSquad();
+                drawPre();
+            }
+        };
+    });
+    
+    squadList.querySelectorAll('[data-rem]').forEach(b => {
+        b.onclick = () => {
+            if (!confirm('¿Eliminar jugador de la plantilla?')) return;
+            state.players = state.players.filter(p => p.id !== b.dataset.rem);
+            save();
+            drawSquad();
+            drawPre();
+        };
+    });
+}
+
+function drawHistory() {
+    const historyContainer = $('history');
+    if (!historyContainer) return;
+    historyContainer.innerHTML = state.matches.map(m => {
+        let own = m.venue === 'away' ? m.away : m.home;
+        let opp = m.venue === 'away' ? m.home : m.away;
+        return `
+            <div class="item">
+                <b>${esc(m.team)} ${own} – ${opp} ${esc(m.opponent)}</b>
+                <div class="muted">${esc(m.date || '')} · ${m.matchday ? 'Jornada ' + esc(m.matchday) : 'Amistoso'} · ${m.events.length} goles</div>
+                <div class="actions" style="margin-top:7px">
+                    <button class="outline" data-view="${m.id}" type="button">Ver resumen</button>
+                    <button class="outline" data-pdf="${m.id}" type="button" style="flex:0.6; padding:8px 4px; font-size:11px;">📥 PDF Padres</button>
+                    <button class="danger" data-delm="${m.id}" type="button" style="flex:0.6; padding:8px 4px; font-size:11px;">🗑️ Eliminar</button>
+                </div>
+                <div id="v${m.id}" class="hidden"></div>
+            </div>
+        `;
+    }).join('') || '<p class="muted">Todavía no hay partidos guardados.</p>';
+    
+    historyContainer.querySelectorAll('[data-view]').forEach(b => {
+        b.onclick = () => {
+            let m = state.matches.find(x => x.id === b.dataset.view);
+            let box = $('v' + m.id);
+            box.classList.toggle('hidden');
+            box.innerHTML = `
+                <div style="margin-top:8px;padding:8px;background:var(--bg);border-radius:8px;font-size:12px;white-space:pre-wrap;">${esc(summary(m))}</div>
+                <button class="primary" data-copym="${m.id}" style="margin-top:7px;width:100%;" type="button">Copiar este resumen</button>
+            `;
+            box.querySelectorAll(`[data-copym="${m.id}"]`).forEach(btn => {
+                btn.onclick = () => copyTextToClipboard(summary(m));
+            });
+        };
+    });
+
+    historyContainer.querySelectorAll('[data-pdf]').forEach(b => {
+        b.onclick = () => {
+            let m = state.matches.find(x => x.id === b.dataset.pdf);
+            generatePDFReport(m);
+        };
+    });
+
+    historyContainer.querySelectorAll('[data-delm]').forEach(b => {
+        b.onclick = () => {
+            let id = b.dataset.delm;
+            let m = state.matches.find(x => x.id === id);
+            if (!confirm(`¿Estás seguro de eliminar el partido contra ${m.opponent}?`)) return;
+            state.matches = state.matches.filter(x => x.id !== id);
+            save();
+            drawHistory();
+            drawStats();
+            msg('Partido eliminado.');
+        };
+    });
+}
+
+function generatePDFReport(m) {
+    let own = m.venue === 'away' ? m.away : m.home;
+    let opp = m.venue === 'away' ? m.home : m.away;
+    
+    let eventsHtml = m.events.sort((a,b)=>a.half - b.half || a.seconds - b.seconds).map(e => {
+        let p = state.players.find(x => x.id === e.playerId);
+        let ast = state.players.find(x => x.id === e.assistId);
+        let timeStr = (e.half === 2 ? '2ª P' : '1ª P') + ' ' + fmt(e.seconds);
+        if(e.type === 'rival') {
+            return `<tr><td style="padding:8px; border-bottom:1px solid #ddd;"><b>${timeStr}</b></td><td style="padding:8px; border-bottom:1px solid #ddd; color:#b51f32;"><b>🥅 Gol de ${esc(m.opponent)}</b></td><td style="padding:8px; border-bottom:1px solid #ddd; font-size:11px; color:#687386;">Portero: ${esc(e.keeper || m.keeper)}</td></tr>`;
+        } else {
+            return `<tr><td style="padding:8px; border-bottom:1px solid #ddd;"><b>${timeStr}</b></td><td style="padding:8px; border-bottom:1px solid #ddd; color:#126744;"><b>⚽ Gol de ${esc(p?.name || 'Jugador')}</b></td><td style="padding:8px; border-bottom:1px solid #ddd; font-size:11px; color:#687386;">${ast ? 'Asistencia: ' + esc(ast.name) : 'Sin asistencia'}</td></tr>`;
+        }
+    }).join('') || '<tr><td colspan="3" style="padding:10px; text-align:center; color:#687386;">Sin goles registrados</td></tr>';
+
+    let htmlContent = `<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Informe ${esc(m.team)} vs ${esc(m.opponent)}</title>
+<style>
+body { font-family: Arial, sans-serif; color: #172033; margin: 0; padding: 20px; background: #fff; }
+.header { text-align: center; border-bottom: 3px solid #b51f32; padding-bottom: 15px; margin-bottom: 20px; }
+.header h1 { margin: 0; color: #b51f32; font-size: 24px; }
+.header p { margin: 5px 0 0; color: #687386; font-size: 13px; }
+.scoreboard { background: #172033; color: white; border-radius: 12px; text-align: center; padding: 20px; margin-bottom: 20px; }
+.teams { font-size: 14px; font-weight: bold; opacity: 0.9; }
+.score { font-size: 42px; font-weight: bold; margin: 10px 0; }
+.details { display: flex; justify-content: space-around; font-size: 13px; margin-bottom: 25px; background: #f3f5f8; padding: 12px; border-radius: 8px; }
+h2 { font-size: 16px; border-left: 4px solid #b51f32; padding-left: 8px; margin-top: 20px; color: #172033; }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+.footer { margin-top: 30px; text-align: center; font-size: 11px; color: #687386; border-top: 1px solid #ddd; padding-top: 10px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>CD Estrella Aljarafe · Fútbol Base</h1>
+  <p>Informe Oficial de Partido</p>
+</div>
+<div class="scoreboard">
+  <div class="teams">${esc(m.team).toUpperCase()} vs ${esc(m.opponent).toUpperCase()}</div>
+  <div class="score">${own} – ${opp}</div>
+  <div style="font-size: 13px; opacity: 0.8;">Resultado Final</div>
+</div>
+<div class="details">
+  <div><b>Fecha:</b> ${esc(m.date || '—')}</div>
+  <div><b>Jornada:</b> ${esc(m.matchday || 'Amistoso')}</div>
+  <div><b>Portero:</b> ${esc(m.keeper || '—')}</div>
+</div>
+<h2>Cronología de Goles</h2>
+<table>
+  ${eventsHtml}
+</table>
+<div class="footer">
+  Generado automáticamente mediante Mi Partido 2.0 · ¡Vamos CD Estrella Aljarafe!
+</div>
+</body>
+</html>`;
+
+    let win = window.open('', '_blank');
+    if(!win) {
+        msg('Permite las ventanas emergentes para descargar el PDF.');
+        return;
+    }
+    win.document.write(htmlContent);
+    win.document.close();
+    setTimeout(() => {
+        win.print();
+    }, 500);
+}
+
+function summary(m) {
+    let lines = [
+        `${m.team} ${m.home}–${m.away} ${m.opponent}`,
+        `Fecha: ${m.date || ''} · Jornada: ${m.matchday || '—'}`,
+        `Localía: ${m.venue === 'home' ? 'En casa' : 'Fuera'}`,
+        `Portero: ${m.keeper || 'No indicado'}`,
+        ''
+    ];
+    m.events.forEach(e => {
+        let p = state.players.find(x => x.id === e.playerId);
+        let a = state.players.find(x => x.id === e.assistId);
+        lines.push(`${e.half === 2 ? '2T' : '1T'} ${fmt(e.seconds ?? e.minute * 60)}: ${e.type === 'rival' ? 'Gol rival (encajado por ' + (e.keeper || m.keeper) + ')' : (p?.name || 'Jugador') + (a ? ' · asistencia de ' + a.name : ' · sin asistencia')}`);
+    });
+    return lines.join('\n');
+}
+
+async function copyTextToClipboard(text) {
+    try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(text);
+            msg('Resumen copiado.');
+            return;
+        }
+    } catch (err) {}
+    try {
+        let textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        let successful = document.execCommand('copy');
+        document.body.removeChild(textarea);
+        if (successful) {
+            msg('Resumen copiado.');
+        } else {
+            prompt('Copia el resumen manualmente:', text);
+        }
+    } catch (e) {
+        prompt('Copia el resumen manualmente:', text);
+    }
+}
+
+function drawStats() {
+    let totalGoals = 0;
+    let totalAssists = 0;
+    let goals = {}, assists = {}, played = {};
+    
+    state.players.forEach(p => {
+        goals[p.id] = 0;
+        assists[p.id] = 0;
+        played[p.id] = 0;
+    });
+
+    state.matches.forEach(m => {
+        m.events.forEach(e => {
+            if (e.type === 'us') {
+                totalGoals++;
+                if (goals[e.playerId] !== undefined) goals[e.playerId]++;
+            }
+            if (e.assistId) {
+                totalAssists++;
+                if (assists[e.assistId] !== undefined) assists[e.assistId]++;
+            }
+        });
+        (m.played || []).forEach(id => {
+            if (played[id] !== undefined) played[id]++;
+        });
+    });
+
+    if ($('stMatches')) $('stMatches').textContent = state.matches.length;
+    if ($('stGoals')) $('stGoals').textContent = totalGoals;
+    if ($('stPlayers')) $('stPlayers').textContent = state.players.length;
+    if ($('stAssists')) $('stAssists').textContent = totalAssists;
+
+    const tableEl = $('table');
+    if (!tableEl) return;
+    
+    tableEl.innerHTML = '<div class="statsrow" style="color:var(--muted); font-size:11px; font-weight:800; border-bottom:1px solid var(--line); padding-bottom:6px; margin-bottom:4px;"><span>JUGADOR</span><span>GOLES</span><span>ASIST.</span><span>PARTIDOS</span></div>' + 
+        (state.players.length ? state.players.map(p => `
+            <div class="statsrow">
+                <b style="font-size:13px">${esc(p.name)}</b>
+                <span>${goals[p.id]}</span>
+                <span>${assists[p.id]}</span>
+                <span>${played[p.id]}</span>
+            </div>
+        `).join('') : '<p class="muted" style="text-align:center; padding:10px 0;">No hay jugadores en la plantilla.</p>');
+}
+</script>
+</body>
+</html>
